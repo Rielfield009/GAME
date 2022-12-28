@@ -127,7 +127,7 @@ character = choose_class()
 print("Comienzas explorar un bosque en busqueda de unos niños perdidos que jugaban por aquí...")
 print(f"De repente se te hacerca un mounstruo con gran velocidad y apenas logras esquivarlo, ¿Qué harás ahora {character.get_name()}?")
 
-boss = Boss("THOR", hp=1000, damage=500)
+boss = Boss("THOR", hp=1000, damage=500) # boss 1 es rapido(ataca primero) tiene daño 
 
 def combat(character, boss):
     while character.get_hp() > 0 and boss.get_hp() > 0:
@@ -135,7 +135,7 @@ def combat(character, boss):
         print("1. Atacar")
         print("2. Esquivar")
         print("3. Defenderse")
-        choice = int(input())
+        choice = int(input())   
         if choice == 1:
             damage = character.attack()
             boss.set_hp(boss.get_hp() - damage)
@@ -149,7 +149,7 @@ def combat(character, boss):
             else:
                 damage = boss.attack()
                 character.set_hp(character.get_hp() - damage)
-                print(f"El jefe te ha hecho {damage} de daño.")
+                print(f"El jefe te ha hecho {damage} de daño.")         # 1/2 de probabilidad
         elif choice == 3:
             character.set_defense(character.get_defense() + 100)
         
@@ -165,3 +165,7 @@ def combat(character, boss):
     else:
         print("¡Felicidades, has ganado el combate!")
 combat(character, boss)
+
+boss2 = Boss("LOKI", hp=1000, damage=500) # boss 2 mucha vida, mucho daño, poca probabilidad de pegar # 1/4 de probabilidad
+
+boss3 = Boss("ODIN", hp=1000, damage=1000) # se demora 3 turnos en pegar, 2/3 de probabilidad de pegar 
