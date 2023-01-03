@@ -1,107 +1,85 @@
 import random
 class Character:
-    def __init__(self, name, hp=1000, damage=200, defense=300, magic=100):
-        self.__name = name
-        self.__hp = hp
-        self.__damage = damage
-        self.__defense = defense
-        self.__magic = magic
-    
-    def set_name(self, name):                           #sets and gets
-        self.__name = name
-    
-    def get_name(self):
-        return self.__name
+    def __init__(self, name, hp, force, defense):
+        self.name = name
+        self.hp = hp
+        self.force = force
+        self.defense = defense
+        
+    def attributes(self):
+        print(self.name, ":", sep="")
+        print("·Vida:", self.hp)
+        print("·Daño:", self.force)
+        print("·Defensa:", self.defense)
 
-    def set_hp(self, hp):
-        self.__hp = hp
-    
-    def get_hp(self):
-        return self.__hp
+    def its_alive(self):
+        return self.hp > 0
 
-    def set_damage(self, damage):
-        self.__damage = damage
+    def die(self):
+        self.hp = 0
+        print(self.name, "ha muerto")
+
+    def damage(self, enemy):
+        return self.force - enemy.defense
     
-    def get_damage(self):
-        return self.__damage
-    
-    def set_defense(self, defense):
-        self.__defense = defense
-    
-    def get_defense(self):
-        return self.__defense
-    
-    def set_magic(self, magic):
-        self.__magic = magic
-    
-    def get_magic(self):
-        return self.__magic
-    
+    def attack(self, enemy):
+        damage = self.damage(enemy)
+        enemy.hp = enemy.hp - damage
+        print(self.name, "ha realizado", damage, "puntos de daño a", enemy.name)
+        if enemy.its_alive():
+            print("Vida de", enemy.name, "es", enemy.hp)
+        else:
+            enemy.die()
+
+    def dodge(self, enemy):
+        aleatorio = random.randint(1, 2)
+        if aleatorio == 1:
+            print("Has esquivado el ataque del enemigo")
+        else:
+            enemy.attack(self)
+        
 class Wizard(Character):
-    def __init__(self,name,hp=1000,damage=200,defense=300,magic=100,wisdom=500):
-        super().__init__(name,hp=1300,damage=100,defense=200,magic=600)
-        self.__wisdom = wisdom
-
-    def set_wisdom(self, wisdom):
-        self.__wisdom = wisdom
+    def __init__(self, name, hp, force, defense, wisdom):
+        super().__init__(name, hp, force, defense)
+        self.wisdom = wisdom
     
-    def get_wisdom(self):
-        return self.__wisdom
+    def attributes(self):
+        super().attributes()
+        print("·Sabiduría:", self.wisdom)
 
-    def attack(self):               
-        r = random.uniform(200, self.__wisdom)
-        return r
-
+    def damage(self, enemy):
+        return self.force*self.wisdom - enemy.defense
+              
 class Berserker(Character):
-    def __init__(self,name,hp=1000,damage=200,defense=300,magic=100,fury=500):
-        super().__init__(name,hp=2000,damage=350,defense=400,magic=10)
-        self.__fury = fury
+    def __init__(self,name,hp, force, defense, fury):
+        super().__init__(name, hp, force, defense)
+        self.fury = fury
 
-    def set_fury(self, fury):
-        self.__fury = fury
+    def attributes(self):
+        super().attributes()
+        print("·Furia:", self.fury)
     
-    def get_fury(self):
-        return self.__fury
-
-    def attack(self):               
-        r = random.uniform(200, self.__fury)
-        return r
-
+    def damage(self, enemy):
+        return self.force*self.fury - enemy.defense
+              
 class Assassin(Character):
-    def __init__(self,name,hp=1000,damage=200,defense=300,magic=100,energy=500):
-        super().__init__(name,hp=1600,damage=450,defense=200,magic=50)
-        self.__energy = energy
+    def __init__(self,name, hp, force, defense, energy):
+        super().__init__(name, hp, force, defense)
+        self.energy = energy
 
-    def set_energy(self, energy):
-        self.__energy = energy
-    
-    def get_magic(self):
-        return self.__energy
+    def attributes(self):
+        super().attributes()
+        print("·Energía:", self.energy)
 
-    def attack(self):               
-        r = random.uniform(200, self.__energy)
-        return r
-
+    def damage(self, enemy):
+        return self.force*self.energy - enemy.defense
+              
 class Boss(Character):
-    def __init__(self,name,hp=1000, damage=500):
-        super().__init__(name,hp=hp, damage=damage)
-        self.__hp = hp
-        self.__damage = random.uniform(500, 600)
+    def __init__(self,name, hp, force, defense):
+        super().__init__(name, hp, force, defense)
     
-    def set_hp(self, hp):
-        self.__damage = hp
-    
-    def get_hp(self):
-        return self.__hp
-
-    def set_damage(self, damage):
-        self.__damage = damage
-    
-    def get_damage(self):
-        return self.__damage
-    
-    def attack(self):
-        return self.__damage
+    def damage(self, enemy):
+        return self.force*self.hp - enemy.defense
 
 def choose_class():
     print("Bienvenido al El Reino de Darthon. Elige tu clase:")
@@ -114,58 +92,67 @@ def choose_class():
     name = input("Escribe el nombre de tu personaje: ")
 
     if choice == 1:
-        print(f"¡Bienvenido, {name}! ¡Aprovecha tu sabiduría y magia para derrotar al jefe!")
-        return Wizard(name)
+        print(f"¡Bienvenido, {name}! ¡Aprovecha tu sabiduría y magia para dezatar todo tu poder!")
+        return Wizard(name, 100, 30, 200, 350)
     elif choice == 2:
-        print(f"¡Bienvenido, {name}! ¡Usa tu furia para aplastar al jefe!")
-        return Berserker(name)
+        print(f"¡Bienvenido, {name}! ¡Usa tu furia para aplastar a tus oponentes!")
+        return Berserker(name, 100, 30, 200, 350)
     elif choice == 3:
-        print(f"¡Bienvenido, {name}! ¡Utiliza tu astucia y sigilo para derrotar al jefe!")
-        return Assassin(name)
+        print(f"¡Bienvenido, {name}! ¡Utiliza tu astucia y sigilo para derrotar a tus victimas!")
+        return Assassin(name, 100, 30, 200, 350)
 
-character = choose_class()
-print("Comienzas explorar un bosque en busqueda de unos niños perdidos que jugaban por aquí...")
-print(f"De repente se te hacerca un mounstruo con gran velocidad y apenas logras esquivarlo, ¿Qué harás ahora {character.get_name()}?")
+def choose_action():
+        contador = 0
+        while True:
+            if contador == 3:
+                print("Has superado el límite de intentos. Fin del juego.")
+                return
 
-boss = Boss("THOR", hp=1000, damage=500) # boss 1 es rapido(ataca primero) tiene daño 
+            print("¿Qué quieres hacer?")
+            print("1. Atacar")
+            print("2. Esquivar")
+            option = int(input())
 
-def combat(character, boss):
-    while character.get_hp() > 0 and boss.get_hp() > 0:
-        print("Es tu turno. Elige una opción:")
-        print("1. Atacar")
-        print("2. Esquivar")
-        print("3. Defenderse")
-        choice = int(input())   
-        if choice == 1:
-            damage = character.attack()
-            boss.set_hp(boss.get_hp() - damage)
-            print(f"Le has hecho {damage} de daño al jefe.")
-        elif choice == 2:
-            rand = random.uniform(0, 1)
-            # Si el número es menor o igual a 0.5, logró esquivar el ataque
-            if rand <= 0.5:
-                print("¡Has logrado esquivar el ataque del jefe!")
-            # Si el número es mayor a 0.5, no logró esquivar el ataque y recibe daño normalmente
+            if option == 1:
+                return "atacar"
+            elif option == 2:
+                return "esquivar"
             else:
-                damage = boss.attack()
-                character.set_hp(character.get_hp() - damage)
-                print(f"El jefe te ha hecho {damage} de daño.")         # 1/2 de probabilidad
-        elif choice == 3:
-            character.set_defense(character.get_defense() + 100)
-        
-        damage = boss.attack()
-        if choice == 3:
-            damage -= character.get_defense()
-            character.set_defense(character.get_defense() - 100)
-        character.set_hp(character.get_hp() - damage)
-        print(f"El jefe te ha hecho {damage} de daño.")
+                print("Opción inválida")
+                contador += 1
     
-    if character.get_hp() <= 0:
-        print("Has perdido el combate.")
+def combat(player, boss_1):
+  turno = 0
+  while player.its_alive() and boss_1.its_alive():
+    if player.hp <= 0:
+      print("\nHa ganado", boss_1.name)
+      break
+    if boss_1.hp <= 0:
+      print("\nHa ganado", player.name)
+      break
+
+    print("\nTurno", turno)
+    print(">>> Acción de ", player.name,":", sep="")
+    act = choose_action()
+    if act == "atacar":
+      player.attack(boss_1)
+    elif act == "esquivar":
+      dodged = player.dodge(boss_1)
+      if dodged:
+        print("El ataque del jefe ha sido esquivado")
+        continue
     else:
-        print("¡Felicidades, has ganado el combate!")
-combat(character, boss)
+      print("Acción inválida")
+      continue
+    print(">>> Acción de ", boss_1.name,":", sep="")
+    if not dodged:
+        boss_1.attack(player)
+    turno = turno + 1
 
-boss2 = Boss("LOKI", hp=1000, damage=500) # boss 2 mucha vida, mucho daño, poca probabilidad de pegar # 1/4 de probabilidad
+player = choose_class()
+boss_1 = Boss("Odin", 100, 500, 100)
 
-boss3 = Boss("ODIN", hp=1000, damage=1000) # se demora 3 turnos en pegar, 2/3 de probabilidad de pegar 
+player.attributes()
+boss_1.attributes()
+
+combat(player, boss_1)
