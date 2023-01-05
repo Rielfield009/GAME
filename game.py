@@ -35,8 +35,10 @@ class Character:
         aleatorio = random.randint(1, 2)
         if aleatorio == 1:
             print("Has esquivado el ataque del enemigo")
+            return True
         else:
-            enemy.attack(self)
+            return False
+
         
 class Wizard(Character):
     def __init__(self, name, hp, force, defense, wisdom):
@@ -48,7 +50,7 @@ class Wizard(Character):
         print("·Sabiduría:", self.wisdom)
 
     def damage(self, enemy):
-        return self.force*self.wisdom - enemy.defense
+        return self.force+self.wisdom - enemy.defense
               
 class Berserker(Character):
     def __init__(self,name,hp, force, defense, fury):
@@ -60,7 +62,7 @@ class Berserker(Character):
         print("·Furia:", self.fury)
     
     def damage(self, enemy):
-        return self.force*self.fury - enemy.defense
+        return self.force+self.fury - enemy.defense
               
 class Assassin(Character):
     def __init__(self,name, hp, force, defense, energy):
@@ -72,15 +74,21 @@ class Assassin(Character):
         print("·Energía:", self.energy)
 
     def damage(self, enemy):
-        return self.force*self.energy - enemy.defense
+        return self.force+self.energy - enemy.defense
               
 class Boss(Character):
     def __init__(self,name, hp, force, defense):
         super().__init__(name, hp, force, defense)
     
-    def damage(self, enemy):
-        return self.force*self.hp - enemy.defense
-
+    def boss_attack(self, enemy):
+        damage = random.randint(30, 60)
+        enemy.hp = enemy.hp - damage
+        print(self.name, "ha realizado", damage, "puntos de daño a", enemy.name)
+        if enemy.its_alive():
+            print("Vida de", enemy.name, "es", enemy.hp)
+        else:
+            enemy.die()
+            
 def choose_class():
     print("Bienvenido al El Reino de Darthon. Elige tu clase:")
     print("1. Wizard")
@@ -93,13 +101,13 @@ def choose_class():
 
     if choice == 1:
         print(f"¡Bienvenido, {name}! ¡Aprovecha tu sabiduría y magia para dezatar todo tu poder!")
-        return Wizard(name, 100, 30, 200, 350)
+        return Wizard(name, 150, 30, 200, 350)
     elif choice == 2:
         print(f"¡Bienvenido, {name}! ¡Usa tu furia para aplastar a tus oponentes!")
-        return Berserker(name, 100, 30, 200, 350)
+        return Berserker(name, 200, 40, 150, 250)
     elif choice == 3:
         print(f"¡Bienvenido, {name}! ¡Utiliza tu astucia y sigilo para derrotar a tus victimas!")
-        return Assassin(name, 100, 30, 200, 350)
+        return Assassin(name, 120, 35, 170, 300)
 
 def choose_action():
         contador = 0
@@ -136,21 +144,24 @@ def combat(player, boss_1):
     act = choose_action()
     if act == "atacar":
       player.attack(boss_1)
+      if boss_1.its_alive():
+        print(">>> Acción de ", boss_1.name,":", sep="")
+        boss_1.boss_attack(player)
     elif act == "esquivar":
       dodged = player.dodge(boss_1)
       if dodged:
         print("El ataque del jefe ha sido esquivado")
-        continue
-    else:
-      print("Acción inválida")
-      continue
-    print(">>> Acción de ", boss_1.name,":", sep="")
-    if not dodged:
-        boss_1.attack(player)
+      else:
+        if boss_1.its_alive():
+          print(">>> Acción de ", boss_1.name,":", sep="")
+          boss_1.boss_attack(player)
     turno = turno + 1
 
+    # Reseteamos la bandera de esquivado para el próximo turno
+    dodged = False
+
 player = choose_class()
-boss_1 = Boss("Odin", 100, 500, 100)
+boss_1 = Boss("Odin", 400, 50, 250)
 
 player.attributes()
 boss_1.attributes()
