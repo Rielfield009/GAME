@@ -1,6 +1,5 @@
 #include <iostream>
 #include <random>
-
 class Character {
 public:
     Character(std::string name, int hp, int force, int defense) :
@@ -13,7 +12,7 @@ public:
         std::cout << "·Defensa: " << defense << std::endl;
     }
 
-    bool isAlive() {
+    bool its_alive() {
         return hp > 0;
     }
 
@@ -30,7 +29,7 @@ public:
         int damage = this->damage(enemy);
         enemy.hp = enemy.hp - damage;
         std::cout << name << " ha realizado " << damage << " puntos de daño a " << enemy.name << std::endl;
-        if (enemy.isAlive()) {
+        if (enemy.its_alive()) {
             std::cout << "Vida de " << enemy.name << " es " << enemy.hp << std::endl;
         }
         else {
@@ -53,7 +52,7 @@ public:
         }
     }
 
-protected:
+public:
     std::string name;
     int hp;
     int force;
@@ -74,7 +73,7 @@ public:
         return force + wisdom - enemy.defense;
     }
 
-private:
+public:
     int wisdom;
 };
 
@@ -92,7 +91,7 @@ public:
         return force + fury - enemy.defense;
     }
 
-private:
+public:
     int fury;
 };
 
@@ -110,7 +109,7 @@ public:
         return force + energy - enemy->defense;
     }
 
-private:
+public:
     int energy;
 };
 
@@ -194,12 +193,12 @@ void combat(Character* player, Boss* boss_1) {
     int round = 1;
     while (player->its_alive() && boss_1->its_alive()) {
         std::cout << "\nRonda " << round << std::endl;
-        std::cout << ">>> Turno de " << player->name_ << " <<<" << std::endl;
+        std::cout << ">>> Turno de " << player->name << " <<<" << std::endl;
         std::string act = choose_action();
         if (act == "atacar") {
             player->attack(boss_1);
             if (boss_1->its_alive()) {
-                std::cout << ">>> Turno de " << boss_1->name_ << " <<<" << std::endl;
+                std::cout << ">>> Turno de " << boss_1->name << " <<<" << std::endl;
                 boss_1->boss_attack(player);
             }
         } else if (act == "esquivar") {
@@ -208,7 +207,7 @@ void combat(Character* player, Boss* boss_1) {
                     std::cout << "Odín retrocede" << std::endl;
                 } else {
                     if (boss_1->its_alive()) {
-                        std::cout << ">>> Turno de " << boss_1->name_ << " <<<" << std::endl;
+                        std::cout << ">>> Turno de " << boss_1->name << " <<<" << std::endl;
                         boss_1->boss_attack(player);
                     }
                 }
