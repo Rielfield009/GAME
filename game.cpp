@@ -229,4 +229,4 @@ if (!player->its_alive()) {
     std::cout << "\nHa ganado " << boss_1.name_ << std::endl;
 } else if (!boss_1.its_alive()) {
         std::cout << "\nHa ganado " << player->name_ << std::endl;
-    }
+    };
