@@ -7,7 +7,7 @@ class Character:
         self.defense = defense
         
     def attributes(self):
-        print(self.name, ":", sep="")
+        print(f"{self.name}:")
         print("·Vida:", self.hp)
         print("·Daño:", self.force)
         print("·Defensa:", self.defense)
@@ -31,15 +31,15 @@ class Character:
         else:
             enemy.die()
 
-    def dodge(self, enemy):
+    def dodge(self):
         aleatorio = random.randint(1, 2)
         if aleatorio == 1:
-            print("Has esquivado el ataque del enemigo")
+            print("Has esquivado la lanza de Odín")
             return True
         else:
+            print("No has podido esquivar la embestida de Odín")
             return False
 
-        
 class Wizard(Character):
     def __init__(self, name, hp, force, defense, wisdom):
         super().__init__(name, hp, force, defense)
@@ -110,60 +110,57 @@ def choose_class():
         return Assassin(name, 120, 35, 170, 300)
 
 def choose_action():
-        contador = 0
-        while True:
-            if contador == 3:
-                print("Has superado el límite de intentos. Fin del juego.")
-                return
+    contador = 0
+    while True:
+        if contador == 3:
+            print("Has superado el límite de intentos. Fin del juego.")
+            return
+        
+        print("¿Qué quieres hacer?")
+        print("1. Atacar")
+        print("2. Esquivar")
+        option = int(input())
 
-            print("¿Qué quieres hacer?")
-            print("1. Atacar")
-            print("2. Esquivar")
-            option = int(input())
-
-            if option == 1:
-                return "atacar"
-            elif option == 2:
-                return "esquivar"
-            else:
-                print("Opción inválida")
-                contador += 1
+        if option == 1:
+            return "atacar"
+        elif option == 2:
+            return "esquivar"
+        else:
+            print("Opción inválida")
+            contador += 1
     
 def combat(player, boss_1):
-  turno = 0
-  while player.its_alive() and boss_1.its_alive():
-    if player.hp <= 0:
-      print("\nHa ganado", boss_1.name)
-      break
-    if boss_1.hp <= 0:
-      print("\nHa ganado", player.name)
-      break
-
-    print("\nTurno", turno)
-    print(">>> Acción de ", player.name,":", sep="")
-    act = choose_action()
-    if act == "atacar":
-      player.attack(boss_1)
-      if boss_1.its_alive():
-        print(">>> Acción de ", boss_1.name,":", sep="")
-        boss_1.boss_attack(player)
-    elif act == "esquivar":
-      dodged = player.dodge(boss_1)
-      if dodged:
-        print("El ataque del jefe ha sido esquivado")
-      else:
-        if boss_1.its_alive():
-          print(">>> Acción de ", boss_1.name,":", sep="")
-          boss_1.boss_attack(player)
-    turno = turno + 1
-
-    # Reseteamos la bandera de esquivado para el próximo turno
-    dodged = False
+    round = 1
+    while player.its_alive() and boss_1.its_alive():
+        print("\nRonda", round)
+        print(f">>> Turno de {player.name} <<<")
+        act = choose_action()
+        if act == "atacar":
+            player.attack(boss_1)
+            if boss_1.its_alive():
+                print(f">>> Turno de {boss_1.name} <<<")
+                boss_1.boss_attack(player)
+        elif act == "esquivar":
+            dodged = player.dodge()
+            if dodged:
+                print("Odín retrocede")
+            else:
+                if boss_1.its_alive():
+                    print(f">>> Turno de {boss_1.name} <<<")
+                    boss_1.boss_attack(player)
+        round = round + 1
+    #Reseteamos para el próximo turno
+        dodged = False
 
 player = choose_class()
-boss_1 = Boss("Odin", 400, 50, 250)
+boss_1 = Boss("Odín", 400, 50, 250)
 
 player.attributes()
 boss_1.attributes()
 
 combat(player, boss_1)
+
+if not player.its_alive():
+    print("\nHa ganado", boss_1.name)
+elif not boss_1.its_alive():
+    print("\nHa ganado", player.name)
