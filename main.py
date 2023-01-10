@@ -1,7 +1,7 @@
 from game import Character, Wizard, Berserker, Assassin, Boss, choose_class, choose_action, combat
 def main():
     player = choose_class()
-    boss_1 = Boss("Odín", 40, 50, 250)
+    boss_1 = Boss("Odín", 350, 50, 250)
 
     player.attributes()
     boss_1.attributes()
