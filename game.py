@@ -90,30 +90,35 @@ class Boss(Character):
             enemy.die()
             
 def choose_class():
-    print("Bienvenido al El Reino de Darthon. Elige tu clase:")
-    print("1. Wizard")
-    print("2. Berserker")
-    print("3. Assassin")
-    
-    choice = int(input("Escribe el número de la clase que quieres elegir: "))
-    
-    name = input("Escribe el nombre de tu personaje: ")
+    contador = 0
+    while True:
+        print("Bienvenido al El Reino de Darthon. Elige tu clase:")
+        print("1. Wizard")
+        print("2. Berserker")
+        print("3. Assassin")
+        choice = int(input("Escribe el número de la clase que quieres elegir: "))
 
-    if choice == 1:
-        print(f"¡Bienvenido, {name}! ¡Aprovecha tu sabiduría y magia para dezatar todo tu poder!")
-        return Wizard(name, 150, 30, 200, 350)
-    elif choice == 2:
-        print(f"¡Bienvenido, {name}! ¡Usa tu furia para aplastar a tus oponentes!")
-        return Berserker(name, 200, 40, 150, 250)
-    elif choice == 3:
-        print(f"¡Bienvenido, {name}! ¡Utiliza tu astucia y sigilo para derrotar a tus victimas!")
-        return Assassin(name, 120, 35, 170, 300)
+        if choice == 1:
+            name = input("Escribe el nombre de tu personaje: ")
+            print(f"¡Bienvenido, {name}! ¡Aprovecha tu sabiduría y magia para dezatar todo tu poder!")
+            return Wizard(name, 180, 30, 200, 350)
+        elif choice == 2:
+            name = input("Escribe el nombre de tu personaje: ")
+            print(f"¡Bienvenido, {name}! ¡Usa tu furia para aplastar a tus oponentes!")
+            return Berserker(name, 250, 50, 150, 250)
+        elif choice == 3:
+            name = input("Escribe el nombre de tu personaje: ")
+            print(f"¡Bienvenido, {name}! ¡Utiliza tu astucia y sigilo para derrotar a tus victimas!")
+            return Assassin(name, 160, 35, 170, 300)
+        else:
+            print("Opción inválida, intentalo nuevamente")
+            contador += 1
 
 def choose_action():
     contador = 0
     while True:
         if contador == 3:
-            print("Has superado el límite de intentos. Fin del juego.")
+            print("Has superado el límite de intentos. Turno finalizado.")
             return
         
         print("¿Qué quieres hacer?")
@@ -151,16 +156,3 @@ def combat(player, boss_1):
         round = round + 1
     #Reseteamos para el próximo turno
         dodged = False
-
-player = choose_class()
-boss_1 = Boss("Odín", 400, 50, 250)
-
-player.attributes()
-boss_1.attributes()
-
-combat(player, boss_1)
-
-if not player.its_alive():
-    print("\nHa ganado", boss_1.name)
-elif not boss_1.its_alive():
-    print("\nHa ganado", player.name)
