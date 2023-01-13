@@ -92,10 +92,10 @@ class Boss(Character):
 def choose_class():
     contador = 0
     while True:
-        print("Bienvenido al El Reino de Darthon. Elige tu clase:")
-        print("1. Wizard")
-        print("2. Berserker")
-        print("3. Assassin")
+        print("Bienvenido al gran coliseo. Elige tu clase:")
+        print("1. Mago")
+        print("2. Vikingo")
+        print("3. Asesino")
         choice = int(input("Escribe el número de la clase que quieres elegir: "))
 
         if choice == 1:
